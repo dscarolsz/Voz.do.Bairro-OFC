@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registrar ocorrência — Voz do Bairro</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Nunito+Sans:wght@400;600;700;800&family=UnifrakturMaguntia&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles/style.css" />
+    <link rel="icon" type="image/png" href="../img/logo-rede-da-quebrada.png" />
+  </head>
+  <body class="fundo-registrar">
+    <header class="topo">
+      <div class="container topo-inner">
+        <a
+          href="../index.html"
+          class="logo"
+          aria-label="Voz do Bairro — Início"
+        >
+          <img
+            src="../img/logo-rede-da-quebrada.png"
+            alt="Logo Rede da Quebrada"
+            class="logo-img"
+          />
+        </a>
+
+        <nav class="nav" aria-label="Navegação principal">
+          <a href="mural.html">Mural</a>
+          <a href="eventos.html">Eventos &amp; Divulgações</a>
+          <a href="perfil.html">Acompanhamento</a>
+          <a href="equipe.html">Sobre Nós</a>
+          <a href="patrocinadores.html">Apoio</a>
+        </nav>
+
+        <div class="acoes">
+          <a href="login.html" class="btn">Entrar</a>
+          <a href="registrar.html" class="btn btn-vermelho ativo"
+            >Registrar Ocorrência</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <main class="conteudo container container-estreito secao">
+      <p class="kicker">Novo registro</p>
+      <h1 class="titulo" style="font-size: clamp(32px, 5vw, 44px)">
+        Registrar ocorrência
+      </h1>
+      <p class="subtitulo">
+        Publique com ou sem cadastro. Você recebe um código para acompanhar e
+        atualizar o andamento depois.
+      </p>
+
+      <form id="form-ocorrencia" onsubmit="salvar(event)" class="form-box">
+        <div class="campo-grupo">
+          <label>Título *</label>
+          <input
+            name="titulo"
+            required
+            placeholder="Ex.: Poste apagado ou buraco na rua"
+          />
+        </div>
+
+        <div class="linha-2">
+          <div class="campo-grupo">
+            <label>Categoria *</label>
+            <select id="cat" name="categoria" required></select>
+          </div>
+          <div class="campo-grupo">
+            <label>Rua / Localização *</label>
+            <input
+              name="local"
+              required
+              placeholder="Ex.: Rua das Flores, 210"
+            />
+          </div>
+        </div>
+
+        <div class="campo-grupo">
+          <label>Descrição *</label>
+          <textarea
+            name="descricao"
+            rows="4"
+            required
+            placeholder="Conte o que está acontecendo..."
+          ></textarea>
+        </div>
+
+        <div class="campo-grupo">
+          <label>Foto (opcional)</label>
+          <input type="file" accept="image/*" onchange="lerFoto(event)" />
+          <input type="hidden" id="foto-base64" name="imagem" />
+          <img
+            id="foto-preview"
+            style="
+              display: none;
+              max-height: 180px;
+              margin-top: 10px;
+              border: 1px solid #d4d4d8;
+            "
+            alt="Prévia"
+          />
+        </div>
+
+        <div class="linha-2">
+          <div class="campo-grupo">
+            <label>Seu nome (opcional)</label>
+            <input id="autor" name="autor" placeholder="Ex.: Ana Carolina" />
+          </div>
+          <div
+            class="campo-grupo"
+            style="display: flex; align-items: flex-end; padding-bottom: 8px"
+          >
+            <label
+              style="
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                text-transform: none;
+                cursor: pointer;
+              "
+            >
+              <input
+                type="checkbox"
+                name="anonimo"
+                onchange="
+                  document.getElementById('autor').disabled = this.checked
+                "
+              />
+              <span>Publicar anonimamente</span>
+            </label>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; flex-wrap: wrap">
+          <button type="submit" class="btn btn-vermelho">
+            Publicar no mural
+          </button>
+          <a href="mural.html" class="btn">Voltar ao mural</a>
+        </div>
+      </form>
+
+      <div
+        id="confirmacao-codigo"
+        class="form-box"
+        style="display: none; margin-top: 20px"
+      >
+        <p class="kicker">Ocorrência publicada</p>
+        <h2 class="titulo" style="font-size: 24px">
+          Guarde seu código de acompanhamento
+        </h2>
+        <p class="subtitulo" style="font-size: 14px">
+          Use este código na página de Acompanhamento para atualizar a situação
+          e o decorrer do caso mesmo sem cadastro:
+        </p>
+        <div
+          style="
+            margin: 16px 0;
+            padding: 14px 18px;
+            background: #fafafa;
+            border: 1px solid #d4d4d8;
+            border-left: 4px solid var(--vermelho);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+          "
+        >
+          <span
+            id="codigo-gerado-texto"
+            style="
+              font-family: var(--fonte-titulo);
+              font-size: 26px;
+              font-weight: 800;
+              letter-spacing: 0.06em;
+              color: var(--preto);
+            "
+          ></span>
+          <button
+            type="button"
+            onclick="copiarCodigoGerado()"
+            class="btn"
+            style="padding: 8px 14px; font-size: 12px"
+          >
+            Copiar código
+          </button>
+        </div>
+        <p
+          id="msg-copiado"
+          class="sucesso-msg"
+          style="display: none; margin-top: 0; margin-bottom: 12px"
+        >
+          Código copiado!
+        </p>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap">
+          <a id="link-acompanhar-codigo" href="perfil.html" class="btn btn-vermelho"
+            >Atualizar andamento agora</a
+          >
+          <a href="mural.html" class="btn">Ver no mural</a>
+        </div>
+      </div>
+    </main>
+
+    <nav class="nav-mobile" aria-label="Atalhos inferiores">
+      <a href="mural.html"
+        ><i data-lucide="clipboard-list"></i><span>Mural</span></a
+      >
+      <a href="eventos.html"
+        ><i data-lucide="calendar"></i><span>Eventos</span></a
+      >
+      <a href="registrar.html" class="ativo"
+        ><span class="btn-mais"><i data-lucide="plus"></i></span
+        ><span>Registrar</span></a
+      >
+      <a href="equipe.html"><i data-lucide="users"></i><span>Equipe</span></a>
+      <a href="patrocinadores.html"
+        ><i data-lucide="heart"></i><span>Apoio</span></a
+      >
+    </nav>
+
+    <div vw class="enabled">
+      <div vw-access-button class="active"></div>
+      <div vw-plugin-wrapper><div class="vw-plugin-top-wrapper"></div></div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+      new window.VLibras.Widget("https://vlibras.gov.br/app");
+    </script>
+
+    <script src="../js/dados.js"></script>
+    <script src="../js/site.js"></script>
+    <script>
+      document.getElementById("cat").innerHTML = CATEGORIAS.map(
+        (c) => `<option value="${c}">${c}</option>`,
+      ).join("");
+      if (window.lucide) lucide.createIcons();
+
+      function gerarCodigoUnico(ocorrencias = []) {
+        const existentes = new Set(
+          ocorrencias.map((o) => String(o.codigo || "").toUpperCase()),
+        );
+        let codigo = "";
+        do {
+          const numero = Math.floor(1000 + Math.random() * 9000);
+          codigo = `VB-${numero}`;
+        } while (existentes.has(codigo));
+        return codigo;
+      }
+
+      function lerFoto(e) {
+        const f = e.target.files?.[0];
+        if (!f) return;
+        const r = new FileReader();
+        r.onload = () => {
+          document.getElementById("foto-base64").value = r.result;
+          const img = document.getElementById("foto-preview");
+          img.src = r.result;
+          img.style.display = "block";
+        };
+        r.readAsDataURL(f);
+      }
+
+      function copiarCodigoGerado() {
+        const texto = document.getElementById("codigo-gerado-texto")?.textContent || "";
+        if (!texto) return;
+        navigator.clipboard?.writeText(texto).catch(() => {});
+        const msg = document.getElementById("msg-copiado");
+        if (msg) msg.style.display = "block";
+      }
+
+      function salvar(e) {
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        const anonimo = fd.get("anonimo") === "on";
+        const nome = (fd.get("autor") || "").toString().trim();
+        const db = getBanco();
+        const logado = getUsuarioLogado();
+        const codigo = gerarCodigoUnico(db.ocorrencias);
+
+        db.ocorrencias.unshift({
+          id: "oc-" + Date.now(),
+          codigo,
+          titulo: fd.get("titulo").toString().trim(),
+          categoria: fd.get("categoria").toString(),
+          situacao: "Aberta",
+          local: fd.get("local").toString().trim(),
+          autor: anonimo ? "Anônimo" : nome || logado?.nome || "Vizinho(a)",
+          usuarioId: anonimo ? null : logado?.id || null,
+          proprioRegistro: !anonimo && Boolean(logado),
+          anonimo,
+          descricao: fd.get("descricao").toString().trim(),
+          imagem: fd.get("imagem") || "",
+          atualizacoes: [],
+        });
+
+        setBanco(db);
+
+        document.getElementById("codigo-gerado-texto").textContent = codigo;
+        document.getElementById("link-acompanhar-codigo").href =
+          `perfil.html?codigo=${encodeURIComponent(codigo)}`;
+        document.getElementById("confirmacao-codigo").style.display = "block";
+        e.target.style.display = "none";
+        document
+          .getElementById("confirmacao-codigo")
+          .scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+    </script>
+
+    <!-- SCRIPT DE ACESSIBILIDADE -->
+    <script>
+      (function () {
+        var VERSION = "2.0.14";
+        var SRC =
+          "https://cdn.jsdelivr.net/npm/accessibility-widgets@" +
+          VERSION +
+          "/widget.js";
+        var SRI =
+          "sha384-4Llnt2HvQNF9unIk80zBvt0ZnofRUlBkQE8RILILsmmpWVigK2KO4fKvYQU32PYz";
+        var LANG_KEY = "accessibilityWidgetLanguage";
+
+        if (document.getElementById("a11y-widget-script")) return;
+
+        // Painel em português do Brasil por padrão (a pessoa pode trocar no painel)
+        try {
+          if (!localStorage.getItem(LANG_KEY))
+            localStorage.setItem(LANG_KEY, "pt");
+        } catch (_) {}
+
+        window.ACCESSIBILITY_WIDGET_CONFIG = {
+          enableBiggerText: true,
+          enableHighContrast: true,
+          enableColorFilter: true,
+          enableDyslexiaFont: true,
+          enableLineHeight: true,
+          enableTextSpacing: true,
+          enablePauseAnimations: true,
+          enableBiggerCursor: true,
+          enableVoiceControl: false,
+
+          widgetPosition: { side: "right", right: "20px", bottom: "20px" },
+          colors: {
+            primary: "#00205e",
+            secondary: "#ffffff",
+            optionBg: "#ffffff",
+            optionText: "#101a33",
+            optionIcon: "#101a33",
+          },
+          button: {
+            size: "56px",
+            borderRadius: "100px",
+            iconSize: "32px",
+            shadow: "0 4px 12px rgba(0, 3, 37, 0.35)",
+          },
+        };
+
+        var s = document.createElement("script");
+        s.id = "a11y-widget-script";
+        s.src = SRC;
+        s.integrity = SRI;
+        s.crossOrigin = "anonymous";
+        s.onload = function () {
+          if (document.readyState === "loading")
+            document.addEventListener("DOMContentLoaded", ajustar);
+          else ajustar();
+        };
+        document.head.appendChild(s);
+
+        // O widget ignora `lang` para idiomas embutidos, então ajusto o rótulo direto no botão
+        function ajustar() {
+          var host = document.getElementById(
+            "snn-accessibility-widget-container",
+          );
+          var btn =
+            host &&
+            host.shadowRoot &&
+            host.shadowRoot.getElementById("snn-accessibility-button");
+          if (!btn) return;
+          var idioma = "pt";
+          try {
+            idioma = localStorage.getItem(LANG_KEY) || "pt";
+          } catch (_) {}
+          if (idioma === "pt")
+            btn.setAttribute("aria-label", "Abrir menu de acessibilidade");
+          btn.setAttribute("aria-haspopup", "dialog");
+        }
+      })();
+    </script>
+
+    <footer class="rodape-escuro" data-raiz="../">
+      <div class="container rodape-escuro-grid">
+        <div class="rodape-marca-bloco">
+          <a href="../index.html" class="rodape-marca-topo">
+            <img
+              src="../img/logo-rede-da-quebrada.png"
+              alt="Logo Rede da Quebrada"
+              class="rodape-logo-img"
+            />
+            <span class="rodape-marca-nome">Rede da Quebrada</span>
+          </a>
+          <p class="rodape-marca-frase">
+            o mural de notícias e ocorrências do seu bairro.
+          </p>
+        </div>
+
+        <div class="rodape-coluna">
+          <h3>Navegação</h3>
+          <ul class="rodape-links">
+            <li><a href="mural.html">Mural</a></li>
+            <li><a href="eventos.html">Eventos & Divulgações</a></li>
+            <li><a href="perfil.html">Acompanhamento</a></li>
+            <li><a href="equipe.html">Sobre nós</a></li>
+            <li><a href="patrocinadores.html">Apoio</a></li>
+          </ul>
+        </div>
+
+        <div class="rodape-coluna">
+          <h3>Contato</h3>
+          <ul class="rodape-contato-lista">
+            <li>
+              <a href="mailto:contato@rededaquebrada.com">
+                <i data-lucide="mail" class="w-4 h-4"></i>
+                <span>contato@rededaquebrada.com</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://instagram.com/rede.daquebrada_"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <i data-lucide="instagram" class="w-4 h-4"></i>
+                <span>@rede.daquebrada_</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="rodape-escuro-base">
+          <span>© 2026 - Rede da Quebrada</span>
+          <span>Trabalho final · Grupo Rede da Quebrada</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Acompanhamento — Voz do Bairro</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Nunito+Sans:wght@400;600;700;800&family=UnifrakturMaguntia&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles/style.css" />
+    <link rel="icon" type="image/png" href="../img/logo-rede-da-quebrada.png" />
+  </head>
+  <body>
+    <header class="topo">
+      <div class="container topo-inner">
+        <a
+          href="../index.html"
+          class="logo"
+          aria-label="Voz do Bairro — Início"
+        >
+          <img
+            src="../img/logo-rede-da-quebrada.png"
+            alt="Logo Rede da Quebrada"
+            class="logo-img"
+          />
+        </a>
+
+        <nav class="nav" aria-label="Navegação principal">
+          <a href="mural.html">Mural</a>
+          <a href="eventos.html">Eventos &amp; Divulgações</a>
+          <a href="perfil.html" class="ativo">Acompanhamento</a>
+          <a href="equipe.html">Sobre Nós</a>
+          <a href="patrocinadores.html">Apoio</a>
+        </nav>
+
+        <div class="acoes">
+          <a href="login.html" class="btn">Entrar</a>
+          <a href="registrar.html" class="btn btn-vermelho"
+            >Registrar Ocorrência</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <main id="conteudo-perfil" class="conteudo container secao"></main>
+
+    <nav class="nav-mobile" aria-label="Atalhos inferiores">
+      <a href="mural.html"
+        ><i data-lucide="clipboard-list"></i><span>Mural</span></a
+      >
+      <a href="eventos.html"
+        ><i data-lucide="calendar"></i><span>Eventos</span></a
+      >
+      <a href="registrar.html"
+        ><span class="btn-mais"><i data-lucide="plus"></i></span
+        ><span>Registrar</span></a
+      >
+      <a href="equipe.html"><i data-lucide="users"></i><span>Equipe</span></a>
+      <a href="patrocinadores.html"
+        ><i data-lucide="heart"></i><span>Apoio</span></a
+      >
+    </nav>
+
+    <div vw class="enabled">
+      <div vw-access-button class="active"></div>
+      <div vw-plugin-wrapper><div class="vw-plugin-top-wrapper"></div></div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+      new window.VLibras.Widget("https://vlibras.gov.br/app");
+    </script>
+
+    <script src="../js/dados.js"></script>
+    <script src="../js/site.js"></script>
+    <script>
+      let codigoConsultadoAtual = "";
+
+      function normalizarCodigo(cod) {
+        return String(cod || "").trim().toUpperCase();
+      }
+
+      function buscarOcorrenciaPorCodigo(cod) {
+        const alvo = normalizarCodigo(cod);
+        if (!alvo) return null;
+        const db = getBanco();
+        return (db.ocorrencias || []).find(
+          (item) => normalizarCodigo(item.codigo) === alvo,
+        );
+      }
+
+      function consultarCodigo(e) {
+        if (e) e.preventDefault();
+        const input = document.getElementById("campo-codigo-busca");
+        const codigo = normalizarCodigo(input?.value || codigoConsultadoAtual);
+        codigoConsultadoAtual = codigo;
+        renderPerfil();
+      }
+
+      function atualizarDecorrerPorCodigo(e, codigo) {
+        e.preventDefault();
+        const alvo = normalizarCodigo(codigo);
+        const fd = new FormData(e.target);
+        const texto = (fd.get("texto") || "").toString().trim();
+        if (!texto) return;
+
+        const db = getBanco();
+        const oc = (db.ocorrencias || []).find(
+          (item) => normalizarCodigo(item.codigo) === alvo,
+        );
+        if (!oc) return;
+
+        oc.situacao = fd.get("situacao").toString();
+        oc.atualizacoes = Array.isArray(oc.atualizacoes) ? oc.atualizacoes : [];
+        oc.atualizacoes.push({
+          autor: (fd.get("autor") || "").toString().trim() || "Morador(a)",
+          texto,
+          data: new Date().toLocaleDateString("pt-BR"),
+        });
+
+        setBanco(db);
+        codigoConsultadoAtual = alvo;
+        renderPerfil();
+      }
+
+      function blocoPlacaPareLateral() {
+        return `
+          <aside class="placa-pare-lateral" aria-label="Placa PARE">
+            <img
+              src="../img/placa-pare.png"
+              alt="Placa PARE"
+              class="placa-pare-img"
+            />
+          </aside>
+        `;
+      }
+
+      function blocoCodigoSemCadastro() {
+        const oc = codigoConsultadoAtual
+          ? buscarOcorrenciaPorCodigo(codigoConsultadoAtual)
+          : null;
+        const atualizacoes = Array.isArray(oc?.atualizacoes)
+          ? oc.atualizacoes
+          : [];
+
+        let resultadoHtml = "";
+        if (codigoConsultadoAtual && !oc) {
+          resultadoHtml = `
+            <p class="erro-msg" style="margin-top:12px;">
+              Nenhuma ocorrência encontrada com o código "${esc(codigoConsultadoAtual)}".
+            </p>
+          `;
+        } else if (oc) {
+          resultadoHtml = `
+            <div style="margin-top:18px; padding-top:16px; border-top:1px solid var(--cinza-borda); text-align:left;">
+              <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+                <span class="selo selo-preto">Código ${esc(oc.codigo)}</span>
+                <span class="selo">${esc(oc.categoria)}</span>
+                <span class="selo ${badgeSituacao(oc.situacao)}">${esc(oc.situacao)}</span>
+              </div>
+              <h3 class="titulo" style="font-size:20px;">${esc(oc.titulo)}</h3>
+              <p class="subtitulo" style="font-size:12px; font-weight:700;">${esc(oc.local)}</p>
+              <p class="subtitulo" style="font-size:14px; margin-top:8px;">${esc(oc.descricao)}</p>
+
+              <div style="margin-top:16px;">
+                <p class="kicker" style="color:#09090b; margin-bottom:8px;">Histórico do andamento (${atualizacoes.length})</p>
+                <div style="display:grid; gap:8px; margin-bottom:16px;">
+                  ${
+                    atualizacoes.length === 0
+                      ? `<p class="subtitulo" style="font-size:12px; margin-top:0;">Ainda não há atualizações registradas neste caso.</p>`
+                      : atualizacoes
+                          .map(
+                            (a) => `
+                    <div style="background:#ffffff; border:1px solid var(--cinza-borda); padding:10px 12px; font-size:13px;">
+                      <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; color:var(--cinza-texto); margin-bottom:4px;">
+                        <span>${esc(a.autor)}</span>
+                        <span>${esc(a.data)}</span>
+                      </div>
+                      <p style="margin:0; color:var(--preto);">${esc(a.texto)}</p>
+                    </div>
+                  `,
+                          )
+                          .join("")
+                  }
+                </div>
+
+                <form onsubmit="atualizarDecorrerPorCodigo(event, '${escAttr(oc.codigo)}')" style="padding-top:14px; border-top:1px solid var(--cinza-borda);">
+                  <div class="linha-2" style="margin-bottom:12px;">
+                    <div class="campo-grupo" style="margin-bottom:0;">
+                      <label>Nova situação</label>
+                      <select name="situacao">
+                        ${SITUACOES.map((s) => `<option value="${escAttr(s)}" ${oc.situacao === s ? "selected" : ""}>${esc(s)}</option>`).join("")}
+                      </select>
+                    </div>
+                    <div class="campo-grupo" style="margin-bottom:0;">
+                      <label>Seu nome (opcional)</label>
+                      <input name="autor" placeholder="Ex.: Morador(a)" />
+                    </div>
+                  </div>
+                  <div class="campo-grupo">
+                    <label>O que mudou no decorrer? *</label>
+                    <textarea name="texto" rows="2" required placeholder="Ex.: A iluminação voltou ou a equipe iniciou o serviço..."></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-vermelho btn-cheio">Salvar atualização pelo código</button>
+                </form>
+              </div>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="form-box" style="margin-top:0; background:var(--cinza-fundo);">
+            <p class="kicker">Sem cadastro</p>
+            <h2 class="titulo" style="font-size:22px;">Atualizar ocorrência pelo código</h2>
+            <p class="subtitulo" style="font-size:14px;">
+              Registrou uma ocorrência sem conta? Digite o código recebido (ex.: <strong>VB-1042</strong>) para acompanhar e atualizar o decorrer.
+            </p>
+            <form onsubmit="consultarCodigo(event)" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+              <input
+                id="campo-codigo-busca"
+                value="${escAttr(codigoConsultadoAtual)}"
+                placeholder="Ex.: VB-1042"
+                style="flex:1; min-width:180px; text-transform:uppercase;"
+              />
+              <button type="submit" class="btn btn-preto">Buscar código</button>
+            </form>
+            ${resultadoHtml}
+          </div>
+        `;
+      }
+
+      function atualizarOcorrencia(e, id) {
+        e.preventDefault();
+        const usuario = getUsuarioLogado();
+        if (!usuario) return;
+        const fd = new FormData(e.target);
+        const db = getBanco();
+        const oc = db.ocorrencias.find(
+          (i) => i.id === id && i.usuarioId === usuario.id,
+        );
+        if (!oc) return;
+        oc.situacao = fd.get("situacao").toString();
+        oc.atualizacoes.push({
+          autor: usuario.nome,
+          texto: fd.get("texto").toString().trim(),
+          data: new Date().toLocaleDateString("pt-BR"),
+        });
+        setBanco(db);
+        e.target.reset();
+        renderPerfil();
+      }
+
+      function excluirOcorrencia(id) {
+        const usuario = getUsuarioLogado();
+        if (!usuario) return;
+        const db = getBanco();
+        const oc = db.ocorrencias.find(
+          (i) => i.id === id && i.usuarioId === usuario.id,
+        );
+        if (!oc || !window.confirm(`Deseja excluir "${oc.titulo}"?`)) return;
+        db.ocorrencias = db.ocorrencias.filter((i) => i.id !== id);
+        setBanco(db);
+        renderPerfil();
+      }
+
+      function renderPerfil() {
+        const usuario = getUsuarioLogado();
+        const main = document.getElementById("conteudo-perfil");
+
+        if (!usuario) {
+          main.innerHTML = `
+          <div class="acompanhamento-layout">
+            ${blocoPlacaPareLateral()}
+            <div class="acompanhamento-blocos">
+              <div class="form-box" style="margin-top:0; text-align:center;">
+                <p class="kicker">Acompanhamento</p>
+                <h1 class="titulo" style="font-size:28px;">Entre ou cadastre-se</h1>
+                <p class="subtitulo">Faça login para ver, atualizar ou excluir as ocorrências da sua conta.</p>
+                <div style="display:flex; gap:10px; justify-content:center; margin-top:20px; flex-wrap:wrap;">
+                  <a href="login.html" class="btn btn-vermelho">Fazer login</a>
+                  <a href="cadastro.html" class="btn btn-preto">Criar cadastro</a>
+                </div>
+              </div>
+              ${blocoCodigoSemCadastro()}
+            </div>
+          </div>
+        `;
+          if (window.lucide) lucide.createIcons();
+          return;
+        }
+
+        const db = getBanco();
+        const minhas = db.ocorrencias.filter((o) => o.usuarioId === usuario.id);
+
+        main.innerHTML = `
+        <div class="secao-topo" style="padding-bottom:20px; border-bottom:1px solid var(--cinza-borda);">
+          <div>
+            <p class="kicker">Conta do morador</p>
+            <h1 class="titulo" style="font-size:clamp(28px,4vw,40px);">${esc(usuario.nome)} · ${esc(usuario.bairro)}</h1>
+            <p class="subtitulo">${esc(usuario.email)}</p>
+          </div>
+          <div class="acoes">
+            <a href="registrar.html" class="btn btn-vermelho">Nova ocorrência</a>
+            <button type="button" onclick="sairConta('login.html')" class="btn">Sair</button>
+          </div>
+        </div>
+
+        <div class="acompanhamento-layout" style="margin-top:24px;">
+          ${blocoPlacaPareLateral()}
+          <div class="acompanhamento-blocos">
+            <div class="grade-2" style="margin-top:0;">
+              ${
+                minhas.length
+                  ? minhas
+                      .map(
+                        (oc) => `
+                <article class="card card-corpo">
+                  <div>
+                    <div style="display:flex; justify-content:space-between; gap:8px; margin-bottom:10px; flex-wrap:wrap;">
+                      <div>
+                        ${oc.codigo ? `<span class="selo selo-preto">${esc(oc.codigo)}</span>` : ""}
+                        <span class="selo">${esc(oc.categoria)}</span>
+                        <span class="selo selo-vermelho">${esc(oc.situacao)}</span>
+                      </div>
+                      <button type="button" onclick="excluirOcorrencia('${oc.id}')" class="btn" style="padding:4px 10px; font-size:11px; color:var(--vermelho); border-color:var(--vermelho);">Excluir</button>
+                    </div>
+                    <h2 class="titulo" style="font-size:20px;">${esc(oc.titulo)}</h2>
+                    <p class="subtitulo" style="font-size:12px;">${esc(oc.local)}</p>
+                    <p class="subtitulo" style="font-size:14px;">${esc(oc.descricao)}</p>
+                  </div>
+
+                  <form onsubmit="atualizarOcorrencia(event, '${oc.id}')" style="margin-top:16px; padding-top:14px; border-top:1px solid var(--cinza-borda);">
+                    <div class="campo-grupo">
+                      <select name="situacao">
+                        ${SITUACOES.map((s) => `<option value="${s}" ${oc.situacao === s ? "selected" : ""}>Situação: ${s}</option>`).join("")}
+                      </select>
+                    </div>
+                    <div class="campo-grupo">
+                      <input name="texto" required placeholder="O que mudou no andamento?" />
+                    </div>
+                    <button type="submit" class="btn btn-vermelho btn-cheio">Atualizar ocorrência</button>
+                  </form>
+                </article>
+              `,
+                      )
+                      .join("")
+                  : `<div class="form-box" style="grid-column:1/-1; margin-top:0; text-align:center;">Você ainda não registrou ocorrências.</div>`
+              }
+            </div>
+            ${blocoCodigoSemCadastro()}
+          </div>
+        </div>
+      `;
+        if (window.lucide) lucide.createIcons();
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      const codigoUrl = normalizarCodigo(params.get("codigo"));
+      if (codigoUrl) codigoConsultadoAtual = codigoUrl;
+
+      renderPerfil();
+    </script>
+
+    <!-- SCRIPT DE ACESSIBILIDADE -->
+    <script>
+      (function () {
+        var VERSION = "2.0.14";
+        var SRC =
+          "https://cdn.jsdelivr.net/npm/accessibility-widgets@" +
+          VERSION +
+          "/widget.js";
+        var SRI =
+          "sha384-4Llnt2HvQNF9unIk80zBvt0ZnofRUlBkQE8RILILsmmpWVigK2KO4fKvYQU32PYz";
+        var LANG_KEY = "accessibilityWidgetLanguage";
+
+        if (document.getElementById("a11y-widget-script")) return;
+
+        // Painel em português do Brasil por padrão (a pessoa pode trocar no painel)
+        try {
+          if (!localStorage.getItem(LANG_KEY))
+            localStorage.setItem(LANG_KEY, "pt");
+        } catch (_) {}
+
+        window.ACCESSIBILITY_WIDGET_CONFIG = {
+          enableBiggerText: true,
+          enableHighContrast: true,
+          enableColorFilter: true,
+          enableDyslexiaFont: true,
+          enableLineHeight: true,
+          enableTextSpacing: true,
+          enablePauseAnimations: true,
+          enableBiggerCursor: true,
+          enableVoiceControl: false,
+
+          widgetPosition: { side: "right", right: "20px", bottom: "20px" },
+          colors: {
+            primary: "#00205e",
+            secondary: "#ffffff",
+            optionBg: "#ffffff",
+            optionText: "#101a33",
+            optionIcon: "#101a33",
+          },
+          button: {
+            size: "56px",
+            borderRadius: "100px",
+            iconSize: "32px",
+            shadow: "0 4px 12px rgba(0, 3, 37, 0.35)",
+          },
+        };
+
+        var s = document.createElement("script");
+        s.id = "a11y-widget-script";
+        s.src = SRC;
+        s.integrity = SRI;
+        s.crossOrigin = "anonymous";
+        s.onload = function () {
+          if (document.readyState === "loading")
+            document.addEventListener("DOMContentLoaded", ajustar);
+          else ajustar();
+        };
+        document.head.appendChild(s);
+
+        // O widget ignora `lang` para idiomas embutidos, então ajusto o rótulo direto no botão
+        function ajustar() {
+          var host = document.getElementById(
+            "snn-accessibility-widget-container",
+          );
+          var btn =
+            host &&
+            host.shadowRoot &&
+            host.shadowRoot.getElementById("snn-accessibility-button");
+          if (!btn) return;
+          var idioma = "pt";
+          try {
+            idioma = localStorage.getItem(LANG_KEY) || "pt";
+          } catch (_) {}
+          if (idioma === "pt")
+            btn.setAttribute("aria-label", "Abrir menu de acessibilidade");
+          btn.setAttribute("aria-haspopup", "dialog");
+        }
+      })();
+    </script>
+
+    <footer class="rodape-escuro" data-raiz="../">
+      <div class="container rodape-escuro-grid">
+        <div class="rodape-marca-bloco">
+          <a href="../index.html" class="rodape-marca-topo">
+            <img
+              src="../img/logo-rede-da-quebrada.png"
+              alt="Logo Rede da Quebrada"
+              class="rodape-logo-img"
+            />
+            <span class="rodape-marca-nome">Rede da Quebrada</span>
+          </a>
+          <p class="rodape-marca-frase">
+            o mural de notícias e ocorrências do seu bairro.
+          </p>
+        </div>
+
+        <div class="rodape-coluna">
+          <h3>Navegação</h3>
+          <ul class="rodape-links">
+            <li><a href="mural.html">Mural</a></li>
+            <li><a href="eventos.html">Eventos &amp; Divulgações</a></li>
+            <li><a href="perfil.html">Acompanhamento</a></li>
+            <li><a href="equipe.html">Sobre nós</a></li>
+            <li><a href="patrocinadores.html">Apoio</a></li>
+          </ul>
+        </div>
+
+        <div class="rodape-coluna">
+          <h3>Contato</h3>
+          <ul class="rodape-contato-lista">
+            <li>
+              <a href="mailto:contato@rededaquebrada.com">
+                <i data-lucide="mail" class="w-4 h-4"></i>
+                <span>contato@rededaquebrada.com</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://instagram.com/rede.daquebrada_"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <i data-lucide="instagram" class="w-4 h-4"></i>
+                <span>@rede.daquebrada_</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="rodape-escuro-base">
+          <span>© 2026 - Rede da Quebrada</span>
+          <span>Trabalho final · Grupo Rede da Quebrada</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

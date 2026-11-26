@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sobre Nós — Voz do Bairro</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Nunito+Sans:wght@400;600;700;800&family=UnifrakturMaguntia&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles/style.css" />
+    <link rel="icon" type="image/png" href="../img/logo-rede-da-quebrada.png" />
+  </head>
+  <body>
+    <header class="topo">
+      <div class="container topo-inner">
+        <a
+          href="../index.html"
+          class="logo"
+          aria-label="Voz do Bairro — Início"
+        >
+          <img
+            src="../img/logo-rede-da-quebrada.png"
+            alt="Logo Rede da Quebrada"
+            class="logo-img"
+          />
+        </a>
+
+        <nav class="nav" aria-label="Navegação principal">
+          <a href="mural.html">Mural</a>
+          <a href="eventos.html">Eventos &amp; Divulgações</a>
+          <a href="perfil.html">Acompanhamento</a>
+          <a href="equipe.html" class="ativo">Sobre Nós</a>
+          <a href="patrocinadores.html">Apoio</a>
+        </nav>
+
+        <div class="acoes">
+          <a href="login.html" class="btn">Entrar</a>
+          <a href="registrar.html" class="btn btn-vermelho"
+            >Registrar Ocorrência</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <main class="conteudo container secao">
+      <div class="sobre-cabecalho">
+        <h1 class="sobre-titulo">Sobre nós</h1>
+      </div>
+
+      <div class="carrossel-wrap">
+        <button
+          type="button"
+          class="seta-carrossel"
+          onclick="moverCarrossel(-1)"
+          aria-label="Integrante anterior"
+        >
+          <i data-lucide="chevron-left" class="w-5 h-5"></i>
+        </button>
+
+        <div id="pista-equipe" class="carrossel-pista"></div>
+
+        <button
+          type="button"
+          class="seta-carrossel"
+          onclick="moverCarrossel(1)"
+          aria-label="Próximo integrante"
+        >
+          <i data-lucide="chevron-right" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div
+        id="dots-equipe"
+        class="carrossel-dots"
+        aria-label="Seleção de integrantes"
+      ></div>
+
+      <section class="caixa-proposito" aria-label="Nosso propósito com o site">
+        <h2>Nosso propósito com o Voz do Bairro</h2>
+        <p>
+          Criamos o Voz do Bairro para dar visibilidade real às ocorrências do
+          dia a dia, conectar moradores, fortalecer o comércio local e abrir
+          espaço para a cultura e o samba que reúnem jovens, famílias e os mais
+          velhos. Queremos que cada registro vire acompanhamento, diálogo e
+          mudança concreta na nossa comunidade.
+        </p>
+      </section>
+
+      <section
+        id="categorias-abordadas"
+        class="bloco-extra"
+        aria-label="Categorias abordadas"
+      >
+        <p class="kicker">Categorias abordadas</p>
+        <h2 class="titulo" style="font-size: 28px">
+          O que você pode registrar no mural
+        </h2>
+        <div id="lista-categorias-equipe" class="grade-4"></div>
+      </section>
+
+      <section
+        id="cuidados-site"
+        class="bloco-extra"
+        aria-label="Cuidados com o site"
+      >
+        <p class="kicker">Cuidados com o site</p>
+        <h2 class="titulo" style="font-size: 28px">
+          Boas práticas e cuidado no projeto
+        </h2>
+        <div id="lista-cuidados-equipe" class="grade-3"></div>
+      </section>
+    </main>
+
+    <nav class="nav-mobile" aria-label="Atalhos inferiores">
+      <a href="mural.html"
+        ><i data-lucide="clipboard-list"></i><span>Mural</span></a
+      >
+      <a href="eventos.html"
+        ><i data-lucide="calendar"></i><span>Eventos</span></a
+      >
+      <a href="registrar.html"
+        ><span class="btn-mais"><i data-lucide="plus"></i></span
+        ><span>Registrar</span></a
+      >
+      <a href="equipe.html" class="ativo"
+        ><i data-lucide="users"></i><span>Equipe</span></a
+      >
+      <a href="patrocinadores.html"
+        ><i data-lucide="heart"></i><span>Apoio</span></a
+      >
+    </nav>
+
+    <div vw class="enabled">
+      <div vw-access-button class="active"></div>
+      <div vw-plugin-wrapper><div class="vw-plugin-top-wrapper"></div></div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+      new window.VLibras.Widget("https://vlibras.gov.br/app");
+    </script>
+
+    <script src="../js/dados.js"></script>
+    <script src="../js/site.js"></script>
+    <script>
+      const escaparTexto = (val) => {
+        if (typeof esc === "function") return esc(val);
+        return String(val ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      };
+
+      const escaparAtributo = (val) => {
+        if (typeof escAttr === "function") return escAttr(val);
+        return escaparTexto(val);
+      };
+
+      const EQUIPE_7 = [
+        {
+          nome: "Ana Carolina",
+          arroba: "@carol.sz____",
+          papel: "Full-Stack, Mural, Dados & Acessibilidade",
+          bio: "Desenvolve e mantém as telas e os dados do portal, organiza o fluxo do mural de ocorrências e cuida da acessibilidade para que qualquer morador consiga usar.",
+          foto: "/img/ana-carolina.jpg",
+        },
+        {
+          nome: "Júlia Martins",
+          arroba: "@mar.juu",
+          papel: "Coordenação & Escuta Comunitária",
+          bio: "Acompanha ocorrências do mural, organiza mutirões e garante que o registro do morador vire cobrança real.",
+          foto: "/img/julia-martins.jpg",
+        },
+        {
+          nome: "Isabelly Silva",
+          arroba: "@isabelly.silva",
+          papel: "Comunicação, Mural & Mobilização",
+          bio: "Ajuda a divulgar os avisos do bairro, organiza o diálogo com os moradores e fortalece a participação comunitária.",
+          foto: "",
+        },
+        {
+          nome: "Ryan da Silva",
+          arroba: "@ryan.silva",
+          papel: "Cultura, Samba & Integração",
+          bio: "Reúne jovens, famílias e idosos nas rodas de samba de fim de semana e na preservação da história do bairro.",
+          foto: "",
+        },
+        {
+          nome: "Marco Aurélio",
+          arroba: "@marco.aurelio",
+          papel: "Parcerias Locais & Acompanhamento",
+          bio: "Acompanha o andamento das demandas no mural e ajuda a conectar o projeto com iniciativas e apoios do bairro.",
+          foto: "",
+        },
+        {
+          nome: "Paula Oliveira",
+          arroba: "@paula.oliveira",
+          papel: "Apoio aos Moradores & Cuidado Comunitário",
+          bio: "Auxilia os moradores no registro claro das ocorrências e cuida da escuta ativa de quem precisa de ajuda no dia a dia.",
+          foto: "",
+        },
+      ];
+
+      const CUIDADOS_SITE = [
+        {
+          titulo: "Privacidade e anonimato",
+          descricao:
+            "Moradores podem registrar ocorrências sem cadastro ou optar por publicar anonimamente quando preferirem.",
+        },
+        {
+          titulo: "Linguagem simples e leitura clara",
+          descricao:
+            "Textos diretos, títulos destacados e bom contraste para facilitar a leitura em celulares e computadores.",
+        },
+        {
+          titulo: "Acessibilidade com VLibras",
+          descricao:
+            "Integração com VLibras para ampliar o acesso à informação para pessoas surdas e com deficiência auditiva.",
+        },
+        {
+          titulo: "Respeito no mural público",
+          descricao:
+            "Atualizações focadas nos fatos e no andamento das ocorrências, mantendo um espaço colaborativo para o bairro.",
+        },
+        {
+          titulo: "Acesso rápido em emergências",
+          descricao:
+            "Atalho direto para o 190 disponível para situações que exigem atendimento policial imediato.",
+        },
+        {
+          titulo: "Atualização contínua do bairro",
+          descricao:
+            "Registros e status pensados para acompanhar o que muda na rua, da abertura até a resolução.",
+        },
+      ];
+
+      let indiceAtual = 0;
+      let direcaoAnimacao = 0;
+      let inicioArrasteX = null;
+      let deslocamentoArrasteX = 0;
+      let bloqueouCliquePorArraste = false;
+
+      function iniciaisNome(nome) {
+        return nome
+          .split(" ")
+          .slice(0, 2)
+          .map((p) => p[0] || "")
+          .join("")
+          .toUpperCase();
+      }
+
+      function moverCarrossel(passo) {
+        const total = EQUIPE_7.length;
+        direcaoAnimacao = passo >= 0 ? 1 : -1;
+        indiceAtual = (indiceAtual + passo + total) % total;
+        renderCarrossel(true);
+      }
+
+      function irParaIntegrante(idx) {
+        if (bloqueouCliquePorArraste) {
+          bloqueouCliquePorArraste = false;
+          return;
+        }
+        if (idx === indiceAtual) return;
+        const total = EQUIPE_7.length;
+        const diff = (idx - indiceAtual + total) % total;
+        direcaoAnimacao = diff <= total / 2 ? 1 : -1;
+        indiceAtual = idx;
+        renderCarrossel(true);
+      }
+
+      function renderCarrossel(comDeslize = false) {
+        const total = EQUIPE_7.length;
+        const esq = (indiceAtual - 1 + total) % total;
+        const centro = indiceAtual;
+        const dir = (indiceAtual + 1) % total;
+
+        const visiveis = [
+          { membro: EQUIPE_7[esq], pos: "esq", idx: esq },
+          { membro: EQUIPE_7[centro], pos: "centro", idx: centro },
+          { membro: EQUIPE_7[dir], pos: "dir", idx: dir },
+        ];
+
+        const classeEntrada = comDeslize
+          ? direcaoAnimacao > 0
+            ? "animar-dir"
+            : "animar-esq"
+          : "";
+
+        const pista = document.getElementById("pista-equipe");
+        pista.innerHTML = visiveis
+          .map(({ membro, pos, idx }) => {
+            const ehCentro = pos === "centro";
+            const avatar = membro.foto
+              ? `<img src="${escaparAtributo(membro.foto)}" alt="${escaparAtributo(membro.nome)}" class="membro-foto-circulo" draggable="false" />`
+              : `<div class="membro-foto-circulo membro-foto-vazia">${escaparTexto(iniciaisNome(membro.nome))}</div>`;
+
+            return `
+          <article
+            onclick="irParaIntegrante(${idx})"
+            class="card-membro ${ehCentro ? "card-membro-centro" : ""} ${classeEntrada}"
+            style="cursor:pointer;"
+          >
+            ${avatar}
+            <p class="membro-handle">${escaparTexto(membro.arroba)} · ${escaparTexto(membro.nome)}</p>
+            <p class="membro-papel">${escaparTexto(membro.papel)}</p>
+            <p class="membro-bio">${escaparTexto(membro.bio)}</p>
+          </article>
+        `;
+          })
+          .join("");
+
+        if (comDeslize) {
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              pista.querySelectorAll(".card-membro").forEach((card) => {
+                card.classList.remove("animar-esq", "animar-dir");
+              });
+            });
+          });
+        }
+
+        document.getElementById("dots-equipe").innerHTML = EQUIPE_7.map(
+          (m, idx) => `
+        <button
+          type="button"
+          onclick="irParaIntegrante(${idx})"
+          aria-label="Ver ${escaparAtributo(m.nome)}"
+          class="carrossel-dot ${idx === indiceAtual ? "ativo" : ""}"
+        ></button>
+      `,
+        ).join("");
+
+        if (window.lucide) lucide.createIcons();
+      }
+
+      const pistaArraste = document.getElementById("pista-equipe");
+
+      pistaArraste.addEventListener("pointerdown", (e) => {
+        if (e.target.closest("button")) return;
+        inicioArrasteX = e.clientX;
+        deslocamentoArrasteX = 0;
+        bloqueouCliquePorArraste = false;
+        pistaArraste.classList.add("arrastando");
+        pistaArraste.setPointerCapture(e.pointerId);
+      });
+
+      pistaArraste.addEventListener("pointermove", (e) => {
+        if (inicioArrasteX === null) return;
+        deslocamentoArrasteX = e.clientX - inicioArrasteX;
+        if (Math.abs(deslocamentoArrasteX) > 8) {
+          bloqueouCliquePorArraste = true;
+        }
+        const limitado = Math.max(
+          -90,
+          Math.min(90, deslocamentoArrasteX * 0.45),
+        );
+        pistaArraste.style.setProperty("--drag-x", `${limitado}px`);
+      });
+
+      function finalizarArraste() {
+        if (inicioArrasteX === null) return;
+        const delta = deslocamentoArrasteX;
+        inicioArrasteX = null;
+        deslocamentoArrasteX = 0;
+        pistaArraste.classList.remove("arrastando");
+        pistaArraste.style.setProperty("--drag-x", "0px");
+
+        if (Math.abs(delta) > 45) {
+          moverCarrossel(delta < 0 ? 1 : -1);
+        }
+      }
+
+      pistaArraste.addEventListener("pointerup", finalizarArraste);
+      pistaArraste.addEventListener("pointercancel", finalizarArraste);
+
+      const categoriasBase =
+        typeof CATEGORIAS !== "undefined" && Array.isArray(CATEGORIAS)
+          ? CATEGORIAS
+          : [
+              "Segurança",
+              "Infraestrutura",
+              "Iluminação",
+              "Limpeza",
+              "Enchentes",
+              "Animais",
+              "Outro",
+            ];
+
+      document.getElementById("lista-categorias-equipe").innerHTML =
+        categoriasBase
+          .map(
+            (cat) => `
+      <a href="mural.html#filtros-cat" class="card card-corpo">
+        <span class="selo">${escaparTexto(cat)}</span>
+        <p class="subtitulo" style="font-size:13px; margin-top:10px;">Ver ocorrências de ${escaparTexto(cat.toLowerCase())} no mural.</p>
+      </a>
+    `,
+          )
+          .join("");
+
+      document.getElementById("lista-cuidados-equipe").innerHTML =
+        CUIDADOS_SITE.map(
+          (item) => `
+      <article class="card card-corpo">
+        <h3 class="titulo" style="font-size:18px;">${escaparTexto(item.titulo)}</h3>
+        <p class="subtitulo" style="font-size:14px;">${escaparTexto(item.descricao)}</p>
+      </article>
+    `,
+        ).join("");
+
+      renderCarrossel();
+      document.addEventListener("DOMContentLoaded", () => {
+        if (window.lucide) lucide.createIcons();
+      });
+    </script>
+
+    <!-- SCRIPT DE ACESSIBILIDADE -->
+    <script>
+      (function () {
+        var VERSION = "2.0.14";
+        var SRC =
+          "https://cdn.jsdelivr.net/npm/accessibility-widgets@" +
+          VERSION +
+          "/widget.js";
+        var SRI =
+          "sha384-4Llnt2HvQNF9unIk80zBvt0ZnofRUlBkQE8RILILsmmpWVigK2KO4fKvYQU32PYz";
+        var LANG_KEY = "accessibilityWidgetLanguage";
+
+        if (document.getElementById("a11y-widget-script")) return;
+
+        try {
+          if (!localStorage.getItem(LANG_KEY))
+            localStorage.setItem(LANG_KEY, "pt");
+        } catch (_) {}
+
+        window.ACCESSIBILITY_WIDGET_CONFIG = {
+          enableBiggerText: true,
+          enableHighContrast: true,
+          enableColorFilter: true,
+          enableDyslexiaFont: true,
+          enableLineHeight: true,
+          enableTextSpacing: true,
+          enablePauseAnimations: true,
+          enableBiggerCursor: true,
+          enableVoiceControl: false,
+
+          widgetPosition: { side: "right", right: "20px", bottom: "20px" },
+          colors: {
+            primary: "#00205e",
+            secondary: "#ffffff",
+            optionBg: "#ffffff",
+            optionText: "#101a33",
+            optionIcon: "#101a33",
+          },
+          button: {
+            size: "56px",
+            borderRadius: "100px",
+            iconSize: "32px",
+            shadow: "0 4px 12px rgba(0, 3, 37, 0.35)",
+          },
+        };
+
+        var s = document.createElement("script");
+        s.id = "a11y-widget-script";
+        s.src = SRC;
+        s.integrity = SRI;
+        s.crossOrigin = "anonymous";
+        s.onload = function () {
+          if (document.readyState === "loading")
+            document.addEventListener("DOMContentLoaded", ajustar);
+          else ajustar();
+        };
+        document.head.appendChild(s);
+
+        function ajustar() {
+          var host = document.getElementById(
+            "snn-accessibility-widget-container",
+          );
+          var btn =
+            host &&
+            host.shadowRoot &&
+            host.shadowRoot.getElementById("snn-accessibility-button");
+          if (!btn) return;
+          var idioma = "pt";
+          try {
+            idioma = localStorage.getItem(LANG_KEY) || "pt";
+          } catch (_) {}
+          if (idioma === "pt")
+            btn.setAttribute("aria-label", "Abrir menu de acessibilidade");
+          btn.setAttribute("aria-haspopup", "dialog");
+        }
+      })();
+    </script>
+
+    <footer class="rodape-escuro" data-raiz="../">
+      <div class="container rodape-escuro-grid">
+        <div class="rodape-marca-bloco">
+          <a href="../index.html" class="rodape-marca-topo">
+            <img
+              src="../img/logo-rede-da-quebrada.png"
+              alt="Logo Rede da Quebrada"
+              class="rodape-logo-img"
+            />
+            <span class="rodape-marca-nome">Rede da Quebrada</span>
+          </a>
+          <p class="rodape-marca-frase">
+            o mural de notícias e ocorrências do seu bairro.
+          </p>
+        </div>
+
+        <div class="rodape-coluna">
+          <h3>Navegação</h3>
+          <ul class="rodape-links">
+            <li><a href="mural.html">Mural</a></li>
+            <li><a href="eventos.html">Notícias</a></li>
+            <li><a href="perfil.html">Acompanhamento</a></li>
+            <li><a href="equipe.html">Sobre nós</a></li>
+            <li><a href="patrocinadores.html">Apoio</a></li>
+          </ul>
+        </div>
+
+        <div class="rodape-coluna">
+          <h3>Contato</h3>
+          <ul class="rodape-contato-lista">
+            <li>
+              <a href="mailto:contato@rededaquebrada.com">
+                <i data-lucide="mail" class="w-4 h-4"></i>
+                <span>contato@rededaquebrada.com</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://instagram.com/rede.daquebrada_"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <i data-lucide="instagram" class="w-4 h-4"></i>
+                <span>@rede.daquebrada_</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="rodape-escuro-base">
+          <span>© 2026 - Rede da Quebrada</span>
+          <span>Trabalho final · Grupo Rede da Quebrada</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
