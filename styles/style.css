@@ -466,13 +466,6 @@ textarea:focus-visible {
   gap: 16px;
 }
 
-.secao-acoes {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-}
-
 .busca-box {
   position: relative;
   margin-top: 24px;

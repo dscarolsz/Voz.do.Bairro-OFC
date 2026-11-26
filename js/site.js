@@ -270,34 +270,3 @@ function escAttr(v) {
 
 aplicarAcessibilidade();
 if (window.lucide) lucide.createIcons();
-
-
-//BOTÃO POLICIA NA NAV
-
-(function inserirBotaoPoliciaNoTopo() {
-  document.addEventListener("DOMContentLoaded", function () {
-    const acoes = document.querySelector(".topo .acoes");
-    if (!acoes || acoes.querySelector(".btn-policia")) return;
-
-    const btnEntrar = Array.from(acoes.querySelectorAll("a, button")).find(
-      (el) => el.textContent && el.textContent.trim().toLowerCase() === "entrar",
-    );
-
-    const linkPolicia = document.createElement("a");
-    linkPolicia.href = "tel:190";
-    linkPolicia.className = "btn-policia";
-    linkPolicia.setAttribute("aria-label", "Polícia — Emergência 190");
-    linkPolicia.setAttribute("title", "Polícia (190)");
-    linkPolicia.innerHTML = `<i data-lucide="shield"></i>`;
-
-    if (btnEntrar && btnEntrar.parentElement === acoes) {
-      btnEntrar.insertAdjacentElement("beforebegin", linkPolicia);
-    } else {
-      acoes.prepend(linkPolicia);
-    }
-
-    if (window.lucide && typeof window.lucide.createIcons === "function") {
-      window.lucide.createIcons();
-    }
-  });
-})();

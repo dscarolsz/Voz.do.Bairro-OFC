@@ -12,7 +12,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles/style.css" />
-   <link rel="icon" type="image/png" href="./img/logo-rede-da-quebrada.png"/>
+    <link rel="icon" type="image/png" href="./img/logo-rede-da-quebrada.png" />
   </head>
   <body class="fundo-home">
     <header class="topo">
@@ -35,9 +35,9 @@
 
         <div class="acoes">
           <a href="pages/login.html" class="btn">Entrar</a>
-          <a href="pages/registrar.html" class="btn btn-vermelho"
-            >Registrar Ocorrência</a
-          >
+          <a href="pages/registrar.html" class="btn btn-vermelho btn-registrar">
+            <span class="so-desktop">Registrar Ocorrência</span>
+          </a>
         </div>
       </div>
     </header>
@@ -96,7 +96,7 @@
           <h3>Navegação</h3>
           <ul class="rodape-links">
             <li><a href="pages/mural.html">Mural</a></li>
-            <li><a href="pages/eventos.html">Eventos & Divulgações</a></li>
+            <li><a href="pages/eventos.html">Eventos &amp; Divulgações</a></li>
             <li><a href="pages/perfil.html">Acompanhamento</a></li>
             <li><a href="pages/equipe.html">Sobre nós</a></li>
             <li><a href="pages/patrocinadores.html">Apoio</a></li>
@@ -114,6 +114,7 @@
             </li>
             <li>
               <a
+                href="https://instagram.com/rede.daquebrada_"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -191,7 +192,6 @@
 
         if (document.getElementById("a11y-widget-script")) return;
 
-        // Painel em português do Brasil por padrão (a pessoa pode trocar no painel)
         try {
           if (!localStorage.getItem(LANG_KEY))
             localStorage.setItem(LANG_KEY, "pt");
@@ -208,7 +208,7 @@
           enableBiggerCursor: true,
           enableVoiceControl: false,
 
-          widgetPosition: { side: "right", right: "20px", bottom: "20px" },
+          widgetPosition: { side: "right", right: "14px", bottom: "92px" },
           colors: {
             primary: "#00205e",
             secondary: "#ffffff",
@@ -217,27 +217,14 @@
             optionIcon: "#101a33",
           },
           button: {
-            size: "56px",
+            size: "54px",
             borderRadius: "100px",
-            iconSize: "32px",
-            shadow: "0 4px 12px rgba(0, 3, 37, 0.35)",
+            iconSize: "30px",
+            shadow: "0 0 0 3px #ffffff, 0 6px 16px rgba(0, 0, 0, 0.45)",
           },
         };
 
-        var s = document.createElement("script");
-        s.id = "a11y-widget-script";
-        s.src = SRC;
-        s.integrity = SRI;
-        s.crossOrigin = "anonymous";
-        s.onload = function () {
-          if (document.readyState === "loading")
-            document.addEventListener("DOMContentLoaded", ajustar);
-          else ajustar();
-        };
-        document.head.appendChild(s);
-
-        // O widget ignora `lang` para idiomas embutidos, então ajusto o rótulo direto no botão
-        function ajustar() {
+        function aplicarRotuloAcessibilidade() {
           var host = document.getElementById(
             "snn-accessibility-widget-container",
           );
@@ -245,15 +232,34 @@
             host &&
             host.shadowRoot &&
             host.shadowRoot.getElementById("snn-accessibility-button");
-          if (!btn) return;
+          if (!btn) return false;
+
           var idioma = "pt";
           try {
             idioma = localStorage.getItem(LANG_KEY) || "pt";
           } catch (_) {}
+
           if (idioma === "pt")
             btn.setAttribute("aria-label", "Abrir menu de acessibilidade");
           btn.setAttribute("aria-haspopup", "dialog");
+          btn.style.border = "3px solid #ffffff";
+          btn.style.boxShadow = "0 6px 18px rgba(0, 0, 0, 0.48)";
+          return true;
         }
+
+        var s = document.createElement("script");
+        s.id = "a11y-widget-script";
+        s.src = SRC;
+        s.integrity = SRI;
+        s.crossOrigin = "anonymous";
+        s.onload = function () {
+          if (aplicarRotuloAcessibilidade()) return;
+          var obs = new MutationObserver(function () {
+            if (aplicarRotuloAcessibilidade()) obs.disconnect();
+          });
+          obs.observe(document.body, { childList: true, subtree: true });
+        };
+        document.head.appendChild(s);
       })();
     </script>
   </body>
