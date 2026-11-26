@@ -296,7 +296,7 @@ textarea:focus-visible {
 }
 
 .logo-img {
-  height: 48px;
+  height: 60px;
   width: auto;
   display: block;
   object-fit: contain;
@@ -464,6 +464,13 @@ textarea:focus-visible {
   align-items: flex-end;
   justify-content: space-between;
   gap: 16px;
+}
+
+.secao-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
 }
 
 .busca-box {
