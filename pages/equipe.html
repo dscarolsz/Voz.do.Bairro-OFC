@@ -167,14 +167,14 @@
           arroba: "@carol.sz____",
           papel: "Full-Stack, Mural, Dados & Acessibilidade",
           bio: "Desenvolve e mantém as telas e os dados do portal, organiza o fluxo do mural de ocorrências e cuida da acessibilidade para que qualquer morador consiga usar.",
-          foto: "/img/ana-carolina.jpg",
+          foto: "../img/ana-carolina.jpg",
         },
         {
           nome: "Júlia Martins",
           arroba: "@mar.juu",
           papel: "Coordenação & Escuta Comunitária",
           bio: "Acompanha ocorrências do mural, organiza mutirões e garante que o registro do morador vire cobrança real.",
-          foto: "/img/julia-martins.jpg",
+          foto: "../img/julia-martins.jpg",
         },
         {
           nome: "Isabelly Silva",
@@ -296,9 +296,10 @@
         pista.innerHTML = visiveis
           .map(({ membro, pos, idx }) => {
             const ehCentro = pos === "centro";
+            const iniciais = escaparTexto(iniciaisNome(membro.nome));
             const avatar = membro.foto
-              ? `<img src="${escaparAtributo(membro.foto)}" alt="${escaparAtributo(membro.nome)}" class="membro-foto-circulo" draggable="false" />`
-              : `<div class="membro-foto-circulo membro-foto-vazia">${escaparTexto(iniciaisNome(membro.nome))}</div>`;
+              ? `<img src="${escaparAtributo(membro.foto)}" alt="${escaparAtributo(membro.nome)}" class="membro-foto-circulo" draggable="false" onerror="this.outerHTML='<div class=\\'membro-foto-circulo membro-foto-vazia\\'>${iniciais}</div>'" />`
+              : `<div class="membro-foto-circulo membro-foto-vazia">${iniciais}</div>`;
 
             return `
           <article
