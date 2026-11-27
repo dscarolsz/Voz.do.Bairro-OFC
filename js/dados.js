@@ -32,21 +32,21 @@ const DADOS_INICIAIS = {
       categoria: "Panificação & Café",
       descricao: "Pão quente às 6h, café coado na hora e desconto para idosos toda terça.",
       selo: "Apoia o Voz do Bairro",
-      foto: ""
+      foto: "../img/padaria-do-seu-tonho.png"
     },
     {
       nome: "Mercearia & Hortifrúti da Praça",
       categoria: "Alimentos Frescos",
       descricao: "Verduras frescas, entregas a pé na vizinhança e apoio direto aos projetos da comunidade.",
       selo: "Parceiro Local",
-      foto: ""
+      foto: "../img/mercearia-e-hortifruti.png"
     },
     {
       nome: "Oficina & Bicicletaria do Beto",
       categoria: "Mobilidade",
       descricao: "Manutenção de bikes, calibragem gratuita e peças acessíveis para quem se move pelo bairro.",
       selo: "Comércio Parceiro",
-      foto: ""
+      foto: "../img/oficina-do-beto.png"
     }
   ],
   equipe: [
@@ -54,37 +54,55 @@ const DADOS_INICIAIS = {
       nome: "Ana Carolina",
       papel: "Full-Stack, Mural, Dados & Acessibilidade",
       bio: "Desenvolve e mantém as telas e os dados do portal, organiza o fluxo do mural de ocorrências e cuida da acessibilidade para que qualquer morador consiga usar.",
-      foto: "../img/ana-carolina.jpg"
+      tecnica: "Arquitetura full-stack do portal, integrando telas interativas, persistência/organização de dados e recursos de acessibilidade ponta a ponta.",
+      foto: "../img/ana-carolina.jpg",
+      instagram: "https://instagram.com/carol.sz____",
+      linkedin: "https://www.linkedin.com/in/ana-carolina-ods/"
     },
     {
       nome: "Júlia Martins",
-      papel: "Coordenação & Escuta Comunitária",
+      papel: "Designer, Coordenação & Escuta Comunitária",
       bio: "Acompanha ocorrências do mural, organiza mutirões e garante que o registro do morador vire cobrança real.",
-      foto: "../img/julia-martins.jpg"
+      tecnica: "Definição de identidade visual, hierarquia tipográfica, paleta de cores e layout responsivo de telas e cartões do portal.",
+      foto: "",
+      instagram: "https://instagram.com/mar.juu",
+      linkedin: ""
     },
     {
       nome: "Isabelly Silva",
-      papel: "Comunicação, Mural & Mobilização",
+      papel: "Designer, Comunicação, Mural & Mobilização",
       bio: "Ajuda a divulgar os avisos do bairro, organiza o diálogo com os moradores e fortalece a participação comunitária.",
-      foto: ""
+      tecnica: "Desenvolvimento de artes, selos, banners e elementos gráficos alinhados à identidade visual do projeto e da comunidade.",
+      foto: "",
+      instagram: "",
+      linkedin: ""
     },
     {
       nome: "Ryan da Silva",
-      papel: "Cultura, Samba & Integração",
+      papel: "Full-Stack, Cultura, Samba & Integração",
       bio: "Reúne jovens, famílias e idosos nas rodas de samba de fim de semana e na preservação da história do bairro.",
-      foto: ""
+      tecnica: "Cuida da integração full-stack da agenda cultural, conectando os dados dos eventos de samba às telas exibidas no portal.",
+      foto: "../img/foto-ryan.jpeg",
+      instagram: "https://instagram.com/ryanzin_zs18",
+      linkedin: "https://www.linkedin.com/in/ryan-da-silva-brito-565114261/"
     },
     {
       nome: "Marco Aurélio",
-      papel: "Parcerias Locais & Acompanhamento",
+      papel: "Scrum-Master, Parcerias Locais & Acompanhamento",
       bio: "Acompanha o andamento das demandas no mural e ajuda a conectar o projeto com iniciativas e apoios do bairro.",
-      foto: ""
+      tecnica: "Organização dos dados de comércios parceiros e patrocinadores, além do acompanhamento de indicadores e status das demandas.",
+      foto: "../img/foto-marco-aurelio.png",
+      instagram: "",
+      linkedin: "https://www.linkedin.com/in/marco-aur%C3%A9lio-oliveira-alves-/"
     },
     {
       nome: "Paula Oliveira",
-      papel: "Apoio aos Moradores & Cuidado Comunitário",
+      papel: "P.O, Apoio aos Moradores & Cuidado Comunitário",
       bio: "Auxilia os moradores no registro claro das ocorrências e cuida da escuta ativa de quem precisa de ajuda no dia a dia.",
-      foto: ""
+      tecnica: "Validação de usabilidade no fluxo de registro de ocorrências, padronização de relatos e acessibilidade no suporte aos usuários.",
+      foto: "../img/foto-paula.jpeg",
+      instagram: "https://www.instagram.com/violtxsy/",
+      linkedin: "https://www.linkedin.com/in/paula-oliveira-81873128a/"
     }
   ],
   patrocinadores: [

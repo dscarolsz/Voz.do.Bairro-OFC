@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Registrar ocorrência — Voz do Bairro</title>
+    <title>Registrar ocorrência — Rede da Quebrada</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,7 +20,7 @@
         <a
           href="../index.html"
           class="logo"
-          aria-label="Voz do Bairro — Início"
+          aria-label="Rede da Quebrada — Início"
         >
           <img
             src="../img/logo-rede-da-quebrada.png"
@@ -199,7 +199,10 @@
           Código copiado!
         </p>
         <div style="display: flex; gap: 10px; flex-wrap: wrap">
-          <a id="link-acompanhar-codigo" href="perfil.html" class="btn btn-vermelho"
+          <a
+            id="link-acompanhar-codigo"
+            href="perfil.html"
+            class="btn btn-vermelho"
             >Atualizar andamento agora</a
           >
           <a href="mural.html" class="btn">Ver no mural</a>
@@ -267,7 +270,8 @@
       }
 
       function copiarCodigoGerado() {
-        const texto = document.getElementById("codigo-gerado-texto")?.textContent || "";
+        const texto =
+          document.getElementById("codigo-gerado-texto")?.textContent || "";
         if (!texto) return;
         navigator.clipboard?.writeText(texto).catch(() => {});
         const msg = document.getElementById("msg-copiado");
@@ -326,11 +330,12 @@
 
         if (document.getElementById("a11y-widget-script")) return;
 
-        // Painel em português do Brasil por padrão (a pessoa pode trocar no painel)
         try {
           if (!localStorage.getItem(LANG_KEY))
             localStorage.setItem(LANG_KEY, "pt");
         } catch (_) {}
+
+        var isMobile = window.matchMedia("(max-width: 767px)").matches;
 
         window.ACCESSIBILITY_WIDGET_CONFIG = {
           enableBiggerText: true,
@@ -343,7 +348,11 @@
           enableBiggerCursor: true,
           enableVoiceControl: false,
 
-          widgetPosition: { side: "right", right: "20px", bottom: "20px" },
+          widgetPosition: {
+            side: "right",
+            right: isMobile ? "12px" : "14px",
+            bottom: isMobile ? "88px" : "92px",
+          },
           colors: {
             primary: "#00205e",
             secondary: "#ffffff",
@@ -352,27 +361,31 @@
             optionIcon: "#101a33",
           },
           button: {
-            size: "56px",
+            size: isMobile ? "48px" : "54px",
             borderRadius: "100px",
-            iconSize: "32px",
-            shadow: "0 4px 12px rgba(0, 3, 37, 0.35)",
+            iconSize: isMobile ? "26px" : "30px",
+            shadow: "0 0 0 3px #ffffff, 0 6px 16px rgba(0, 0, 0, 0.45)",
           },
         };
 
-        var s = document.createElement("script");
-        s.id = "a11y-widget-script";
-        s.src = SRC;
-        s.integrity = SRI;
-        s.crossOrigin = "anonymous";
-        s.onload = function () {
-          if (document.readyState === "loading")
-            document.addEventListener("DOMContentLoaded", ajustar);
-          else ajustar();
-        };
-        document.head.appendChild(s);
+        function posicionarWidgetMobile(host, btn) {
+          if (!host) return;
+          if (window.matchMedia("(max-width: 767px)").matches) {
+            host.style.setProperty("position", "fixed", "important");
+            host.style.setProperty("bottom", "88px", "important");
+            host.style.setProperty("right", "12px", "important");
+            host.style.setProperty("left", "auto", "important");
+            host.style.setProperty("top", "auto", "important");
+            host.style.setProperty("z-index", "45", "important");
 
-        // O widget ignora `lang` para idiomas embutidos, então ajusto o rótulo direto no botão
-        function ajustar() {
+            if (btn) {
+              btn.style.setProperty("width", "48px", "important");
+              btn.style.setProperty("height", "48px", "important");
+            }
+          }
+        }
+
+        function aplicarRotuloAcessibilidade() {
           var host = document.getElementById(
             "snn-accessibility-widget-container",
           );
@@ -380,15 +393,46 @@
             host &&
             host.shadowRoot &&
             host.shadowRoot.getElementById("snn-accessibility-button");
-          if (!btn) return;
+          if (!btn) return false;
+
           var idioma = "pt";
           try {
             idioma = localStorage.getItem(LANG_KEY) || "pt";
           } catch (_) {}
+
           if (idioma === "pt")
             btn.setAttribute("aria-label", "Abrir menu de acessibilidade");
           btn.setAttribute("aria-haspopup", "dialog");
+          btn.style.border = "3px solid #ffffff";
+          btn.style.boxShadow = "0 6px 18px rgba(0, 0, 0, 0.48)";
+          posicionarWidgetMobile(host, btn);
+          return true;
         }
+
+        window.addEventListener("resize", function () {
+          var host = document.getElementById(
+            "snn-accessibility-widget-container",
+          );
+          var btn =
+            host &&
+            host.shadowRoot &&
+            host.shadowRoot.getElementById("snn-accessibility-button");
+          posicionarWidgetMobile(host, btn);
+        });
+
+        var s = document.createElement("script");
+        s.id = "a11y-widget-script";
+        s.src = SRC;
+        s.integrity = SRI;
+        s.crossOrigin = "anonymous";
+        s.onload = function () {
+          if (aplicarRotuloAcessibilidade()) return;
+          var obs = new MutationObserver(function () {
+            if (aplicarRotuloAcessibilidade()) obs.disconnect();
+          });
+          obs.observe(document.body, { childList: true, subtree: true });
+        };
+        document.head.appendChild(s);
       })();
     </script>
 
@@ -404,7 +448,7 @@
             <span class="rodape-marca-nome">Rede da Quebrada</span>
           </a>
           <p class="rodape-marca-frase">
-         O mural de notícias e ocorrências do seu bairro.
+            O mural de notícias e ocorrências do seu bairro.
           </p>
         </div>
 

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sobre Nós — Voz do Bairro</title>
+    <title>Sobre Nós — Rede da Quebrada</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,7 +20,7 @@
         <a
           href="../index.html"
           class="logo"
-          aria-label="Voz do Bairro — Início"
+          aria-label="Rede da Quebrada — Início"
         >
           <img
             src="../img/logo-rede-da-quebrada.png"
@@ -80,9 +80,9 @@
       ></div>
 
       <section class="caixa-proposito" aria-label="Nosso propósito com o site">
-        <h2>Nosso propósito com o Voz do Bairro</h2>
+        <h2>Nosso propósito com a Rede da Quebrada:</h2>
         <p>
-          Criamos o Voz do Bairro para dar visibilidade real às ocorrências do
+          Criamos a Rede da Quebrada para dar visibilidade real às ocorrências do
           dia a dia, conectar moradores, fortalecer o comércio local e abrir
           espaço para a cultura e o samba que reúnem jovens, famílias e os mais
           velhos. Queremos que cada registro vire acompanhamento, diálogo e
@@ -161,48 +161,82 @@
         return escaparTexto(val);
       };
 
+      const ICONE_INSTAGRAM_SVG = `
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+          <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+        </svg>
+      `;
+
+      const ICONE_LINKEDIN_SVG = `
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+          <rect width="4" height="12" x="2" y="9"></rect>
+          <circle cx="4" cy="4" r="2"></circle>
+        </svg>
+      `;
+
       const EQUIPE_7 = [
         {
           nome: "Ana Carolina",
-          arroba: "@carol.sz____",
           papel: "Full-Stack, Mural, Dados & Acessibilidade",
           bio: "Desenvolve e mantém as telas e os dados do portal, organiza o fluxo do mural de ocorrências e cuida da acessibilidade para que qualquer morador consiga usar.",
+          tecnica:
+            "Arquitetura full-stack do portal, integrando telas interativas, persistência e organização de dados e recursos de acessibilidade ponta a ponta.",
           foto: "../img/ana-carolina.jpg",
+          instagram: "https://instagram.com/carol.sz____",
+          linkedin: "https://www.linkedin.com/in/ana-carolina-ods/",
         },
         {
           nome: "Júlia Martins",
-          arroba: "@mar.juu",
-          papel: "Coordenação & Escuta Comunitária",
+          papel: "Designer, Coordenação & Escuta Comunitária",
           bio: "Acompanha ocorrências do mural, organiza mutirões e garante que o registro do morador vire cobrança real.",
-          foto: "../img/julia-martins.jpg",
+          tecnica:
+            "Definição de identidade visual, hierarquia tipográfica, paleta de cores e layout responsivo de telas e cartões do portal.",
+          foto: "",
+          instagram: "https://instagram.com/mar.juu",
+          linkedin: "",
         },
         {
           nome: "Isabelly Silva",
-          arroba: "@isabelly.silva",
-          papel: "Comunicação, Mural & Mobilização",
+          papel: "Designer, Comunicação, Mural & Mobilização",
           bio: "Ajuda a divulgar os avisos do bairro, organiza o diálogo com os moradores e fortalece a participação comunitária.",
+          tecnica:
+            "Desenvolvimento de artes, selos, banners e elementos gráficos alinhados à identidade visual do projeto e da comunidade.",
           foto: "",
+          instagram: "",
+          linkedin: "",
         },
         {
           nome: "Ryan da Silva",
-          arroba: "@ryan.silva",
-          papel: "Cultura, Samba & Integração",
+          papel: "Full-Stack, Cultura, Samba & Integração",
           bio: "Reúne jovens, famílias e idosos nas rodas de samba de fim de semana e na preservação da história do bairro.",
-          foto: "",
+          tecnica:
+            "Cuida da integração full-stack da agenda cultural, conectando os dados dos eventos de samba às telas exibidas no portal.",
+          foto: "../img/foto-ryan.jpeg",
+          instagram: "https://instagram.com/ryanzin_zs18",
+          linkedin: "https://www.linkedin.com/in/ryan-da-silva-brito-565114261/",
         },
         {
           nome: "Marco Aurélio",
-          arroba: "@marco.aurelio",
           papel: "Parcerias Locais & Acompanhamento",
           bio: "Acompanha o andamento das demandas no mural e ajuda a conectar o projeto com iniciativas e apoios do bairro.",
-          foto: "",
+          tecnica:
+            "Organização dos dados de comércios parceiros e patrocinadores, além do acompanhamento de indicadores e status das demandas.",
+          foto: "../img/foto-marco-aurelio.png",
+          instagram: "",
+          linkedin: "https://www.linkedin.com/in/marco-aur%C3%A9lio-oliveira-alves-/",
         },
         {
           nome: "Paula Oliveira",
-          arroba: "@paula.oliveira",
-          papel: "Apoio aos Moradores & Cuidado Comunitário",
+          papel: "P.O, Apoio aos Moradores & Cuidado Comunitário",
           bio: "Auxilia os moradores no registro claro das ocorrências e cuida da escuta ativa de quem precisa de ajuda no dia a dia.",
-          foto: "",
+          tecnica:
+            "Validação de usabilidade no fluxo de registro de ocorrências, padronização de relatos e acessibilidade no suporte aos usuários.",
+          foto: "../img/foto-paula.jpeg",
+          instagram: "https://www.instagram.com/violtxsy/",
+          linkedin: "https://www.linkedin.com/in/paula-oliveira-81873128a/",
         },
       ];
 
@@ -274,6 +308,56 @@
         renderCarrossel(true);
       }
 
+      function renderizarBlocoTecnico(membro) {
+        if (!membro || !membro.tecnica) return "";
+        return `
+          <div class="membro-tecnica">
+            <span class="membro-tecnica-rotulo">Parte técnica</span>
+            <p>${escaparTexto(membro.tecnica)}</p>
+          </div>
+        `;
+      }
+
+      function renderizarRedesSociais(membro) {
+        const links = [];
+
+        if (membro.instagram) {
+          links.push(`
+            <a
+              href="${escaparAtributo(membro.instagram)}"
+              target="_blank"
+              rel="noopener noreferrer"
+              onclick="event.stopPropagation()"
+              class="membro-rede-btn"
+              aria-label="Instagram de ${escaparAtributo(membro.nome)}"
+              title="Instagram"
+            >
+              ${ICONE_INSTAGRAM_SVG}
+            </a>
+          `);
+        }
+
+        if (membro.linkedin) {
+          links.push(`
+            <a
+              href="${escaparAtributo(membro.linkedin)}"
+              target="_blank"
+              rel="noopener noreferrer"
+              onclick="event.stopPropagation()"
+              class="membro-rede-btn"
+              aria-label="LinkedIn de ${escaparAtributo(membro.nome)}"
+              title="LinkedIn"
+            >
+              ${ICONE_LINKEDIN_SVG}
+            </a>
+          `);
+        }
+
+        if (!links.length) return "";
+
+        return `<div class="membro-redes">${links.join("")}</div>`;
+      }
+
       function renderCarrossel(comDeslize = false) {
         const total = EQUIPE_7.length;
         const esq = (indiceAtual - 1 + total) % total;
@@ -308,9 +392,11 @@
             style="cursor:pointer;"
           >
             ${avatar}
-            <p class="membro-handle">${escaparTexto(membro.arroba)} · ${escaparTexto(membro.nome)}</p>
+            <p class="membro-handle">${escaparTexto(membro.nome)}</p>
             <p class="membro-papel">${escaparTexto(membro.papel)}</p>
             <p class="membro-bio">${escaparTexto(membro.bio)}</p>
+            ${renderizarBlocoTecnico(membro)}
+            ${renderizarRedesSociais(membro)}
           </article>
         `;
           })
@@ -343,7 +429,7 @@
       const pistaArraste = document.getElementById("pista-equipe");
 
       pistaArraste.addEventListener("pointerdown", (e) => {
-        if (e.target.closest("button")) return;
+        if (e.target.closest("button, a")) return;
         inicioArrasteX = e.clientX;
         deslocamentoArrasteX = 0;
         bloqueouCliquePorArraste = false;
@@ -440,6 +526,8 @@
             localStorage.setItem(LANG_KEY, "pt");
         } catch (_) {}
 
+        var isMobile = window.matchMedia("(max-width: 767px)").matches;
+
         window.ACCESSIBILITY_WIDGET_CONFIG = {
           enableBiggerText: true,
           enableHighContrast: true,
@@ -451,7 +539,11 @@
           enableBiggerCursor: true,
           enableVoiceControl: false,
 
-          widgetPosition: { side: "right", right: "20px", bottom: "20px" },
+          widgetPosition: {
+            side: "right",
+            right: isMobile ? "12px" : "14px",
+            bottom: isMobile ? "88px" : "92px",
+          },
           colors: {
             primary: "#00205e",
             secondary: "#ffffff",
@@ -460,26 +552,31 @@
             optionIcon: "#101a33",
           },
           button: {
-            size: "56px",
+            size: isMobile ? "48px" : "54px",
             borderRadius: "100px",
-            iconSize: "32px",
-            shadow: "0 4px 12px rgba(0, 3, 37, 0.35)",
+            iconSize: isMobile ? "26px" : "30px",
+            shadow: "0 0 0 3px #ffffff, 0 6px 16px rgba(0, 0, 0, 0.45)",
           },
         };
 
-        var s = document.createElement("script");
-        s.id = "a11y-widget-script";
-        s.src = SRC;
-        s.integrity = SRI;
-        s.crossOrigin = "anonymous";
-        s.onload = function () {
-          if (document.readyState === "loading")
-            document.addEventListener("DOMContentLoaded", ajustar);
-          else ajustar();
-        };
-        document.head.appendChild(s);
+        function posicionarWidgetMobile(host, btn) {
+          if (!host) return;
+          if (window.matchMedia("(max-width: 767px)").matches) {
+            host.style.setProperty("position", "fixed", "important");
+            host.style.setProperty("bottom", "88px", "important");
+            host.style.setProperty("right", "12px", "important");
+            host.style.setProperty("left", "auto", "important");
+            host.style.setProperty("top", "auto", "important");
+            host.style.setProperty("z-index", "45", "important");
 
-        function ajustar() {
+            if (btn) {
+              btn.style.setProperty("width", "48px", "important");
+              btn.style.setProperty("height", "48px", "important");
+            }
+          }
+        }
+
+        function aplicarRotuloAcessibilidade() {
           var host = document.getElementById(
             "snn-accessibility-widget-container",
           );
@@ -487,15 +584,46 @@
             host &&
             host.shadowRoot &&
             host.shadowRoot.getElementById("snn-accessibility-button");
-          if (!btn) return;
+          if (!btn) return false;
+
           var idioma = "pt";
           try {
             idioma = localStorage.getItem(LANG_KEY) || "pt";
           } catch (_) {}
+
           if (idioma === "pt")
             btn.setAttribute("aria-label", "Abrir menu de acessibilidade");
           btn.setAttribute("aria-haspopup", "dialog");
+          btn.style.border = "3px solid #ffffff";
+          btn.style.boxShadow = "0 6px 18px rgba(0, 0, 0, 0.48)";
+          posicionarWidgetMobile(host, btn);
+          return true;
         }
+
+        window.addEventListener("resize", function () {
+          var host = document.getElementById(
+            "snn-accessibility-widget-container",
+          );
+          var btn =
+            host &&
+            host.shadowRoot &&
+            host.shadowRoot.getElementById("snn-accessibility-button");
+          posicionarWidgetMobile(host, btn);
+        });
+
+        var s = document.createElement("script");
+        s.id = "a11y-widget-script";
+        s.src = SRC;
+        s.integrity = SRI;
+        s.crossOrigin = "anonymous";
+        s.onload = function () {
+          if (aplicarRotuloAcessibilidade()) return;
+          var obs = new MutationObserver(function () {
+            if (aplicarRotuloAcessibilidade()) obs.disconnect();
+          });
+          obs.observe(document.body, { childList: true, subtree: true });
+        };
+        document.head.appendChild(s);
       })();
     </script>
 
@@ -519,7 +647,7 @@
           <h3>Navegação</h3>
           <ul class="rodape-links">
             <li><a href="mural.html">Mural</a></li>
-            <li><a href="eventos.html">Notícias</a></li>
+            <li><a href="eventos.html">Eventos & Divulgações</a></li>
             <li><a href="perfil.html">Acompanhamento</a></li>
             <li><a href="equipe.html">Sobre nós</a></li>
             <li><a href="patrocinadores.html">Apoio</a></li>
