@@ -1,4 +1,4 @@
-# Voz do Bairro — Rede da Quebrada
+# Rede da Quebrada
 
 Mural comunitário desenvolvido para conectar moradores, dar visibilidade às ocorrências do bairro, divulgar eventos locais e fortalecer a rede de apoio da comunidade.
 
