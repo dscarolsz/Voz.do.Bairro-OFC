@@ -555,7 +555,7 @@ body.reduce-motion .btn-policia::after {
   gap: 12px;
 }
 
-/* Botão "Voltar ao início" menor que "Registrar ocorrência" */
+/* Botão "Voltar ao início" */
 .secao-acoes .btn:not(.btn-vermelho) {
   padding: 7px 12px;
   font-size: 12px;
